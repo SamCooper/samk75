@@ -1,0 +1,9 @@
+# Copyright (c) 2020 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+if SHIELD_SAMK75
+
+config ZMK_KEYBOARD_NAME
+    default "SamK 75"
+
+endif

@@ -1,0 +1,8 @@
+file_format: "1"
+id: samk75
+name: SamK 75
+type: shield
+requires: [nice_nano//zmk]
+features:
+  - keys
+  - studio
