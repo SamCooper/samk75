@@ -6,4 +6,8 @@ if SHIELD_SAMK75
 config ZMK_KEYBOARD_NAME
     default "SamK 75"
 
+config ZMK_BACKLIGHT
+    select LED
+    select LED_PWM
+
 endif
