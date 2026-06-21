@@ -6,4 +6,10 @@ if SHIELD_SAMK75
 config ZMK_KEYBOARD_NAME
     default "SamK 75"
 
+config PWM
+    default y
+
+config LED_PWM
+    default y
+
 endif
