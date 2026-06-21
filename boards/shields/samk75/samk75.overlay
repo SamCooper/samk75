@@ -13,7 +13,6 @@
     chosen {
         zmk,kscan = &kscan0;
         zmk,physical-layout = &physical_layout0;
-        zmk,backlight = &backlight;
     };
 
     kscan0: kscan {
@@ -155,4 +154,5 @@ RC(5,0)   RC(5,1)   RC(5,2)                      RC(5,6)                      RC
             ;
     };
 };
+
 
