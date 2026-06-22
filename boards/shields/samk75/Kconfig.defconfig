@@ -6,10 +6,13 @@ if SHIELD_SAMK75
 config ZMK_KEYBOARD_NAME
     default "SamK 75"
 
-config PWM
+config I2C
     default y
 
-config LED_PWM
+config LED
+    default y
+
+config IS31FL3731
     default y
 
 endif

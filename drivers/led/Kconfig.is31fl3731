@@ -1,0 +1,4 @@
+config IS31FL3731
+    bool "Multiplexer (mux) GPIO Driver"
+    default y
+
