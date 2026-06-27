@@ -49,6 +49,16 @@
         zmk,kscan = &kscan0;
         zmk,physical-layout = &physical_layout0;
         zmk,backlight = &is31fl3731;
+        zmk,ext-power = &ext_power; /* Forces ZMK to map external power framework to your node */
+    };
+
+    /* 1. Define the physical hardware switch */
+    ext-power {
+        compatible = "zmk,ext-power-generic";
+        label = "EXT_POWER";
+        /* Replace gpio0 13 with the exact port (gpio0/gpio1) and pin number on your MCU */
+        control-gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>; 
+        init-delay-ms = <10>; /* Let voltages settle before driver starts probing */
     };
 
     kscan0: kscan {
