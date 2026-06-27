@@ -35,6 +35,7 @@
 
     /* IS31FL3216A LED Driver Instance */
     is31fl3731: is31fl3731@74 {
+        status = "okay";
         compatible = "issi,is31fl3731";
         reg = <0x74>;
         pwm_led_0 {
