@@ -59,6 +59,7 @@ static int is31fl3731_write_reg(const struct i2c_dt_spec *i2c, uint8_t reg,
 
 static int is31fl3731_write_reg8(const struct i2c_dt_spec *i2c, uint8_t bank, uint8_t reg, uint8_t data) {
 	int status;
+	LOG_DBG("IS31FL3731 REG:%d to %d", reg, data);
 
 	status = is31fl3731_write_reg(i2c, ISSI_COMMANDREGISTER, bank);
 	if (status < 0) {
@@ -72,6 +73,9 @@ static int is31fl3731_write_reg8(const struct i2c_dt_spec *i2c, uint8_t bank, ui
 static int is31fl3731_led_set_brightness(const struct device *dev,
 					  uint32_t led, uint8_t value)
 {
+	LOG_DBG("IS31FL3731 set brightness LED:%d to %d", led, value);
+
+
 	const struct is31fl3731_cfg *config = dev->config;
 	uint8_t pwm_reg = ISSI_REG_LED_FIRST + led;
 
