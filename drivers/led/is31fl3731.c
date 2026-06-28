@@ -70,31 +70,6 @@ static int is31fl3731_write_reg(const struct i2c_dt_spec *i2c, uint8_t reg, uint
 //    return is31fl3731_write_reg(i2c, reg, data);
 //}
 //
-static int is31fl3731_led_set_brightness(const struct device *dev, uint32_t led, uint8_t value)
-{
-	const struct is31fl3731_cfg *config = dev->config;
-	LOG_ERR("IS31FL3731 set brightness LED:%d to %d", led, value);
-
-	is31fl3731_init_registers(&config->i2c);
-	return is31fl3731_write_reg(&config->i2c, 0x24 + 59, 255);
-
-//	const struct is31fl3731_cfg *config = dev->config;
-//	uint8_t pwm_reg = ISSI_REG_LED_FIRST + led;
-//
-//	if (led > IS31FL3731_MAX_LEDS - 1) {
-//		return -EINVAL;
-//	}
-//
-//	return is31fl3731_write_reg8(&config->i2c, 0, pwm_reg, value);
-}
-
-static int is31fl3731_led_on(const struct device *dev, uint32_t led) {
-	return 0;//is31fl3731_led_set_brightness(dev, led, 100);
-}
-
-static int is31fl3731_led_off(const struct device *dev, uint32_t led) {
-	return 0;//is31fl3731_led_set_brightness(dev, led, 0);
-}
 
 static int is31fl3731_init_registers(const struct i2c_dt_spec *i2c)
 {
@@ -126,6 +101,32 @@ static int is31fl3731_init_registers(const struct i2c_dt_spec *i2c)
   }
 
   return 0;
+}
+
+static int is31fl3731_led_set_brightness(const struct device *dev, uint32_t led, uint8_t value)
+{
+	const struct is31fl3731_cfg *config = dev->config;
+	LOG_ERR("IS31FL3731 set brightness LED:%d to %d", led, value);
+
+	is31fl3731_init_registers(&config->i2c);
+	return is31fl3731_write_reg(&config->i2c, 0x24 + 59, 255);
+
+//	const struct is31fl3731_cfg *config = dev->config;
+//	uint8_t pwm_reg = ISSI_REG_LED_FIRST + led;
+//
+//	if (led > IS31FL3731_MAX_LEDS - 1) {
+//		return -EINVAL;
+//	}
+//
+//	return is31fl3731_write_reg8(&config->i2c, 0, pwm_reg, value);
+}
+
+static int is31fl3731_led_on(const struct device *dev, uint32_t led) {
+	return 0;//is31fl3731_led_set_brightness(dev, led, 100);
+}
+
+static int is31fl3731_led_off(const struct device *dev, uint32_t led) {
+	return 0;//is31fl3731_led_set_brightness(dev, led, 0);
 }
 
 static int is31fl3731_init(const struct device *dev)
