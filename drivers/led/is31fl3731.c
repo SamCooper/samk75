@@ -180,12 +180,13 @@ static int is31fl3731_init_registers(const struct i2c_dt_spec *i2c)
   is31fl3731_clear(i2c); // set each led to 0 PWM
 
   for (uint8_t f = 0; f < 8; f++) {
-    for (uint8_t i = 0; i <= 0x11; i++)
+    for (uint8_t i = 0; i <= 0x11; i++) {
       status = is31fl3731_write_reg8(i2c, f, i, 0xff); // each 8 LEDs on
       if (status < 0) {
 	    LOG_ERR("4) IS31FL3731 init early status return:%d %d %d", f, i, status);
 	    return status;
       }
+    }
   }
 
   return is31fl3731_write_reg8(i2c, ISSI_BANK_FUNCTIONREG, ISSI_REG_AUDIOSYNC, 0x0);
