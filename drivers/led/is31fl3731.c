@@ -58,28 +58,25 @@ static int is31fl3731_write_reg(const struct i2c_dt_spec *i2c, uint8_t reg, uint
     return status;
 }
 
-static int is31fl3731_write_reg8(const struct i2c_dt_spec *i2c, uint8_t bank, uint8_t reg, uint8_t data) {
-	int status;
-
-	status = is31fl3731_write_reg(i2c, ISSI_COMMANDREGISTER, bank);
-	if (status < 0) {
-		LOG_ERR("Could not write buffer: %i", status);
-		return status;
-	}
-
-    return is31fl3731_write_reg(i2c, reg, data);
-}
-
-static int is31fl3731_led_set_brightness(const struct device *dev,
-					  uint32_t led, uint8_t value)
+//static int is31fl3731_write_reg8(const struct i2c_dt_spec *i2c, uint8_t bank, uint8_t reg, uint8_t data) {
+//	int status;
+//
+//	status = is31fl3731_write_reg(i2c, ISSI_COMMANDREGISTER, bank);
+//	if (status < 0) {
+//		LOG_ERR("Could not write buffer: %i", status);
+//		return status;
+//	}
+//
+//    return is31fl3731_write_reg(i2c, reg, data);
+//}
+//
+static int is31fl3731_led_set_brightness(const struct device *dev, uint32_t led, uint8_t value)
 {
 	const struct is31fl3731_cfg *config = dev->config;
 	LOG_ERR("IS31FL3731 set brightness LED:%d to %d", led, value);
 
 	is31fl3731_init_registers(&config->i2c);
-	int status = is31fl3731_write_reg(0x24 + 59, 255);
-	LOG_ERR("                             :%d", status);
-    return status;
+	return is31fl3731_write_reg(&config->i2c, 0x24 + 59, 255);
 
 //	const struct is31fl3731_cfg *config = dev->config;
 //	uint8_t pwm_reg = ISSI_REG_LED_FIRST + led;
@@ -124,8 +121,9 @@ static int is31fl3731_init_registers(const struct i2c_dt_spec *i2c)
     is31fl3731_write_buffer(i2c, erasebuf, 25);
   }
 
-  for (uint8_t i = 0; i <= 0x11; i++)
+  for (uint8_t i = 0; i <= 0x11; i++) {
     is31fl3731_write_reg(i2c, i, 0xff);  // each 8 LEDs on
+  }
 
   return 0;
 }
