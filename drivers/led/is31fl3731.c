@@ -108,7 +108,7 @@ static int is31fl3731_led_set_brightness(const struct device *dev, uint32_t led,
 	const struct is31fl3731_cfg *config = dev->config;
 	LOG_ERR("IS31FL3731 set brightness LED:%d to %d", led, value);
 
-	is31fl3731_init_registers(&config->i2c);
+	//is31fl3731_init_registers(&config->i2c);
 	return is31fl3731_write_reg(&config->i2c, 0x24 + 59, 255);
 
 //	const struct is31fl3731_cfg *config = dev->config;
@@ -140,7 +140,7 @@ static int is31fl3731_init(const struct device *dev)
 		return -ENODEV;
 	}
 
-	return 0;//is31fl3731_init_registers(&config->i2c);
+	return is31fl3731_init_registers(&config->i2c);
 }
 
 static const struct led_driver_api is31fl3731_led_api = {
