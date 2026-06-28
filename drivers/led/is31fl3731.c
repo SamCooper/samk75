@@ -73,8 +73,12 @@ static int is31fl3731_write_reg8(const struct i2c_dt_spec *i2c, uint8_t bank, ui
 static int is31fl3731_led_set_brightness(const struct device *dev,
 					  uint32_t led, uint8_t value)
 {
+	const struct is31fl3731_cfg *config = dev->config;
 	LOG_ERR("IS31FL3731 set brightness LED:%d to %d", led, value);
-    return 0;
+
+	int status = is31fl3731_write_reg8(&config->i2c, 0, 0x24 + 11 + (3 * 16), 255);
+	LOG_ERR("                             :%d", status);
+    return status;
 
 //	const struct is31fl3731_cfg *config = dev->config;
 //	uint8_t pwm_reg = ISSI_REG_LED_FIRST + led;
