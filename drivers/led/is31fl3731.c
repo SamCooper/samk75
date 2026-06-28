@@ -74,16 +74,16 @@ static int is31fl3731_led_set_brightness(const struct device *dev,
 					  uint32_t led, uint8_t value)
 {
 	LOG_ERR("IS31FL3731 set brightness LED:%d to %d", led, value);
+    return 0;
 
-
-	const struct is31fl3731_cfg *config = dev->config;
-	uint8_t pwm_reg = ISSI_REG_LED_FIRST + led;
-
-	if (led > IS31FL3731_MAX_LEDS - 1) {
-		return -EINVAL;
-	}
-
-	return is31fl3731_write_reg8(&config->i2c, 0, pwm_reg, value);
+//	const struct is31fl3731_cfg *config = dev->config;
+//	uint8_t pwm_reg = ISSI_REG_LED_FIRST + led;
+//
+//	if (led > IS31FL3731_MAX_LEDS - 1) {
+//		return -EINVAL;
+//	}
+//
+//	return is31fl3731_write_reg8(&config->i2c, 0, pwm_reg, value);
 }
 
 static int is31fl3731_led_on(const struct device *dev, uint32_t led) {
@@ -107,7 +107,7 @@ static void is31fl3731_clear(const struct i2c_dt_spec *i2c) {
   }
 }
 
-static int is31fl3731_init_registers(const struct i2c_dt_spec *i2c)
+static int is31fl3731_init_registers_old(const struct i2c_dt_spec *i2c)
 {
 	int status;
 
@@ -145,6 +145,50 @@ static int is31fl3731_init_registers(const struct i2c_dt_spec *i2c)
   }
 
     return is31fl3731_write_reg8(i2c, ISSI_BANK_FUNCTIONREG, ISSI_REG_AUDIOSYNC, 0x0);
+}
+
+static int is31fl3731_init_registers(const struct i2c_dt_spec *i2c)
+{
+  int status;
+
+  // shutdown
+  status = is31fl3731_write_reg8(i2c, ISSI_BANK_FUNCTIONREG, ISSI_REG_SHUTDOWN, 0x00);
+  if (status < 0) {
+	LOG_ERR("1) IS31FL3731 init early status return:%d", status);
+	return status;
+  }
+
+  k_msleep(10);
+
+  // out of shutdown
+  status = is31fl3731_write_reg8(i2c, ISSI_BANK_FUNCTIONREG, ISSI_REG_SHUTDOWN, 0x01);
+  if (status < 0) {
+	LOG_ERR("2) IS31FL3731 init early status return:%d", status);
+	return status;
+  }
+
+  // picture mode
+  status = is31fl3731_write_reg8(i2c, ISSI_BANK_FUNCTIONREG, ISSI_REG_CONFIG, ISSI_REG_CONFIG_PICTUREMODE);
+  if (status < 0) {
+	LOG_ERR("3) IS31FL3731 init early status return:%d", status);
+	return status;
+  }
+
+  is31fl3731_write_reg8(i2c, ISSI_BANK_FUNCTIONREG, ISSI_REG_PICTUREFRAME, 0);
+
+  // all LEDs on & 0 PWM
+  is31fl3731_clear(i2c); // set each led to 0 PWM
+
+  for (uint8_t f = 0; f < 8; f++) {
+    for (uint8_t i = 0; i <= 0x11; i++)
+      status = is31fl3731_write_reg8(i2c, f, i, 0xff); // each 8 LEDs on
+      if (status < 0) {
+	    LOG_ERR("4) IS31FL3731 init early status return:%d %d %d", f, i, status);
+	    return status;
+      }
+  }
+
+  return is31fl3731_write_reg8(i2c, ISSI_BANK_FUNCTIONREG, ISSI_REG_AUDIOSYNC, 0x0);
 }
 
 static int is31fl3731_init(const struct device *dev)
