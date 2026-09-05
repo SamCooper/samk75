@@ -110,7 +110,7 @@ static int is31fl3731_led_set_brightness(const struct device *dev, uint32_t led,
 
 	//is31fl3731_init_registers(&config->i2c);
   uint8_t erasebuf[25];
-  memset(erasebuf, 255, 25);
+  memset(erasebuf, value, 25);
 
   // set each led to 0 PWM
   is31fl3731_write_reg(&config->i2c, ISSI_COMMANDREGISTER, 0);
