@@ -109,7 +109,16 @@ static int is31fl3731_led_set_brightness(const struct device *dev, uint32_t led,
 	LOG_ERR("IS31FL3731 set brightness LED:%d to %d", led, value);
 
 	//is31fl3731_init_registers(&config->i2c);
-	return is31fl3731_write_reg(&config->i2c, 0x24 + 59, 255);
+  uint8_t erasebuf[25];
+  memset(erasebuf, 255, 25);
+
+  // set each led to 0 PWM
+  is31fl3731_write_reg(&config->i2c, ISSI_COMMANDREGISTER, 0);
+  for (uint8_t i = 0; i < 6; i++) {
+    erasebuf[0] = 0x24 + i * 24;
+    is31fl3731_write_buffer(&config->i2c, erasebuf, 25);
+  }
+	return 0;//is31fl3731_write_reg(&config->i2c, 0x24 + 59, 255);
 
 //	const struct is31fl3731_cfg *config = dev->config;
 //	uint8_t pwm_reg = ISSI_REG_LED_FIRST + led;
