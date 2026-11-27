@@ -22,6 +22,6 @@
 include:
   - board: nice_nano@2
     shield: samk75
-    snippet: zmk-usb-logging
+    snippet: studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y
 
